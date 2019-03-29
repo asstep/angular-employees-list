@@ -1,0 +1,172 @@
+
+<mat-toolbar>
+    <span>Employees List</span>
+    <span class="header-spacer"></span>
+    <button mat-stroked-button color="primary" (click)="createEmployee()">Add new</button>
+    <!--<mat-icon class="example-icon" aria-hidden="false" aria-label="Example delete icon">delete</mat-icon>-->
+</mat-toolbar>
+
+<div class="table">
+    <div class="table-row table-header">
+        <div class="table-column table-column__id">
+            ID
+        </div>
+        <div class="table-column table-column__firstName">
+            First Name
+        </div>
+        <div class="table-column table-column__lastName">
+            Last Name
+        </div>
+        <div class="table-column table-column__birthday">
+            Birthday
+        </div>
+        <div class="table-column table-column__gender">
+            Gender
+        </div>
+        <div class="table-column table-column__availability">
+            Availability
+        </div>
+        <div class="table-column table-column__salary">
+            Salary, $
+        </div>
+        <div class="table-column table-column__tax">
+            Tax, %
+        </div>
+        <div class="table-column table-column__total">
+            Total, $
+        </div>
+        <div class="table-column table-column__buttons">
+
+        </div>
+    </div>
+    <div class="table-row" *ngFor="let item of emplObsv | async">
+        <div class="table-column table-column__id">
+            {{item.id}}
+        </div>
+        <div class="table-column table-column__firstName">
+            {{item.firstName}}
+        </div>
+        <div class="table-column table-column__lastName">
+            {{item.lastName}}
+        </div>
+        <div class="table-column table-column__birthday">
+            {{item.birthday | date:'dd.MM.yyyy'}}
+        </div>
+        <div class="table-column table-column__gender">
+            {{item.gender | titlecase }}
+        </div>
+        <div class="table-column table-column__availability">
+            <i class="material-icons" *ngIf="item.availability">
+                done
+            </i>
+            <i class="material-icons" *ngIf="!item.availability">
+                close
+            </i>
+        </div>
+        <div class="table-column table-column__salary">
+            {{item.salary | currencyWithSpace}}
+        </div>
+        <div class="table-column table-column__tax">
+            {{item.tax * 100}}
+        </div>
+        <div class="table-column table-column__total">
+            {{item.salary - item.salary * item.tax | currencyWithSpace }}
+        </div>
+        <div class="table-column table-column__buttons">
+            <button mat-button color="primary" (click)="readEmplItem(item.id)">
+                <i class="material-icons">edit</i>
+                <!--<span>Edit</span>-->
+            </button>
+            |
+            <button mat-button color="warn" (click)="deleteEmplItem(item.id)">
+                <i class="material-icons">delete</i>
+                <!--<span>Delete</span>-->
+            </button>
+        </div>
+    </div>
+</div>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> ID</th>
+        <td mat-cell *matCellDef="let element"> {{element.id}}</td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="firstName">
+            <th mat-header-cell *matHeaderCellDef> First Name</th>
+        <td mat-cell *matCellDef="let element"> {{element.firstName}}</td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef> Last Name</th>
+        <td mat-cell *matCellDef="let element"> {{element.lastName}}</td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="birthday">
+        <th mat-header-cell *matHeaderCellDef> Birthday</th>
+        <td mat-cell *matCellDef="let element">
+            {{element.birthday | date:'dd.MM.yyyy'}}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="gender">
+        <th mat-header-cell *matHeaderCellDef> Gender</th>
+        <td mat-cell *matCellDef="let element"> {{element.gender | titlecase }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="availability">
+        <th mat-header-cell *matHeaderCellDef> Available</th>
+        <td mat-cell *matCellDef="let element">
+            <i class="material-icons" *ngIf="element.availability">
+                done
+            </i>
+            <i class="material-icons" *ngIf="!element.availability">
+                close
+            </i>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="salary">
+        <th mat-header-cell *matHeaderCellDef> Salary, $</th>
+        <td mat-cell *matCellDef="let element">
+            {{element.salary | currencyWithSpace}}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tax">
+        <th mat-header-cell *matHeaderCellDef> TAX, %</th>
+        <td mat-cell *matCellDef="let element">
+            {{element.tax * 100}}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef> Total, $</th>
+        <td mat-cell *matCellDef="let element">
+            {{element.salary - element.salary * element.tax | currencyWithSpace }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="buttons">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element" class="buttons">
+            <button mat-button color="primary" (click)="readEmplItem(element.id)">
+                <i class="material-icons">edit</i>
+                <!--<span>Edit</span>-->
+            </button>
+            |
+            <button mat-button color="warn" (click)="deleteEmplItem(element.id)">
+                <i class="material-icons">delete</i>
+                <!--<span>Delete</span>-->
+            </button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

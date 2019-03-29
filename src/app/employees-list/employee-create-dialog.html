@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>
+    Create employee
+</h2>
+<mat-dialog-content class="mat-typography">
+    <form class="form form-edit"
+          (submit)="submitCreateEmpl($event)"
+          [formGroup]="createEmployee">
+
+        <mat-form-field>
+            <input matInput placeholder="First Name" formControlName="firstName" [(ngModel)]="data.firstName">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Last Name" formControlName="lastName" [(ngModel)]="data.lastName">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput [matDatepicker]="picker" placeholder="Birthday" formControlName="birthday" [(ngModel)]="data.birthday">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-radio-group aria-label="Select an option" [(ngModel)]="data.gender" formControlName="gender" class="form-radio">
+            <label> Gender</label>
+            <mat-radio-button value="male" name="gender">Male</mat-radio-button>
+            <mat-radio-button value="female" name="gender">Female</mat-radio-button>
+        </mat-radio-group>
+
+        <mat-checkbox formControlName="availability" [(ngModel)]="data.availability" class="form-checkbox">Availability</mat-checkbox>
+
+        <mat-form-field>
+            <input matInput placeholder="Salary" formControlName="salary" [(ngModel)]="data.salary" type="number" min="0" max="999999" maxlength="6">
+            <mat-error *ngIf="!createEmployee.get('salary').valid">
+                Min 0 and Max 999999
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Tax" formControlName="tax" [(ngModel)]="data.tax" type="number" min="0" max="100" maxlength="3">
+            <mat-error *ngIf="!createEmployee.get('tax').valid">
+                Min 0 and Max 100
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Total" value="{{createEmployee.get('salary').value - createEmployee.get('salary').value * createEmployee.get('tax').value / 100 | currencyWithSpace}}" readonly>
+        </mat-form-field>
+
+        <mat-dialog-actions class="form-buttons">
+            <button mat-stroked-button color="warn" mat-dialog-close>
+                Cancel
+            </button>
+            <button mat-stroked-button color="primary" type="submit" [disabled]="!this.createEmployee.valid">
+                Submit
+            </button>
+        </mat-dialog-actions>
+    </form>
+</mat-dialog-content>
