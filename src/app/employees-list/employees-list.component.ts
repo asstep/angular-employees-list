@@ -87,6 +87,7 @@ export class EmployeesListComponent implements OnInit {
 
     deleteEmplItem(id) {
         this.employeesListService.deleteEmplList(id);
+        this.getEmployeesList();
     }
 
     ngOnInit() {
